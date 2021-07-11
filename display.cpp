@@ -1,27 +1,9 @@
-#include <FastLED.h>
+#include "display.h"
 
 #define SEGMENTS_COUNT 5
 #define LEDS_IN_SEGMENT 4
-#define NUM_COLORS 6
 
 enum Segment { outer_line, inner_line, primary_diagonal, secondary_diagonal, vertical };
-
-CRGB colors[NUM_COLORS] = {
-  0xF60000,
-  0xFF8C00,
-  0xFFEE00,
-  0x4DE94C,
-  0x3783FF,
-  0x4815AA
-};
-//CRGB colors[NUM_COLORS] = {
-//  0xfc2847,
-//  0xffa343,
-//  0xfdfc74,
-//  0x71bc78,
-//  0x0f4c81,
-//  0x7442c8
-//};
 
 
 /*
@@ -94,7 +76,7 @@ void lightSegment(CRGB leds[], byte ledsCount, CRGB color, byte numberIndex, Seg
   }
 }
 
-void lightNumber(CRGB leds[], byte ledsCount, byte number, byte numberIndex) {
+void lightNumber(CRGB leds[], byte ledsCount, CRGB colors[], byte number, byte numberIndex) {
   int num = number % 10;
   CRGB color = colors[number / 10];
   switch (num) {
@@ -140,11 +122,11 @@ void lightNumber(CRGB leds[], byte ledsCount, byte number, byte numberIndex) {
   }
 }
 
-void displayAll(CRGB leds[], byte ledsCount, byte rightTopNumber, byte leftTopNumber, byte rightBottomNumber, byte leftBottomNumber) {
+void displayAll(CRGB leds[], byte ledsCount, CRGB colors[], byte rightTopNumber, byte leftTopNumber, byte rightBottomNumber, byte leftBottomNumber) {
   reset(leds, ledsCount);
   lightRange(leds, CRGB::White, 24, 10);
-  lightNumber(leds, ledsCount, rightTopNumber, 0);
-  lightNumber(leds, ledsCount, leftTopNumber, 1);
-  lightNumber(leds, ledsCount, rightBottomNumber, 2);
-  lightNumber(leds, ledsCount, leftBottomNumber, 3);
+  lightNumber(leds, ledsCount, colors, rightTopNumber, 0);
+  lightNumber(leds, ledsCount, colors, leftTopNumber, 1);
+  lightNumber(leds, ledsCount, colors, rightBottomNumber, 2);
+  lightNumber(leds, ledsCount, colors, leftBottomNumber, 3);
 }
