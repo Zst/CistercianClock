@@ -20,6 +20,9 @@ void setup() {
   delay(2000);
   FastLED.addLeds<WS2812, DATA_PIN, GRB>(leds, NUM_LEDS);  
   FastLED.setBrightness(BRIGHTNESS);
+  reset(leds, NUM_LEDS);
+  lightRange(leds, CRGB::White, 24, 10);
+  FastLED.show();
   WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP
   Serial.begin(115200);
   wm.setConnectRetries(4);
@@ -30,18 +33,20 @@ void setup() {
     Serial.println("failed to connect");
   } else { 
     Serial.println("connected");
+    // timezone.setLocation() for geo-ip lookup is not working, but if you call it before setting up location explicitly, you get a timeout and it fails to set
+    // a proper timezone completely
     timezone.setLocation(DEFAULT_TIMEZONE);
   }
 }
 
 void loop() {
-  wm.process();
-  events();
+  wm.process(); // wifi manager loop
+  events(); // ezTime loop
+  reset(leds, NUM_LEDS);
   if (isConnected && timeStatus() == timeSet) {
-    displayAll(leds, NUM_LEDS, led_colors, timezone.second(), timezone.minute(), timezone.hour(), timezone.day());
+    displayAll(leds, led_colors, timezone.second(), timezone.minute(), timezone.hour(), timezone.day());
     FastLED.delay(1000);
   } else {
-    reset(leds, NUM_LEDS);
     idleIdx += idleGoingUp ? 1 : -1;
     if (idleIdx > IDLE_MAX_LED) {
       idleGoingUp = false;

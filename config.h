@@ -2,7 +2,7 @@
 #define CONFIG_H
 
 #define NUM_LEDS 58
-#define BRIGHTNESS 100
+#define BRIGHTNESS 4
 #define DATA_PIN 23
 
 #define NTP_SERVER "time3.google.com"
@@ -14,7 +14,7 @@
 CRGB led_colors[NUM_COLORS] = {
   0xF60000,
   0xFF8C00,
-  0xFFEE00,
+  0xFFEE55,
   0x4DE94C,
   0x3783FF,
   0x4815AA
